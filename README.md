@@ -1,1 +1,1 @@
-Here I have attached my personal project Test scripts, Kindly go through it.
+Cura Healthcare Service webapplication is a web application used to book appointments for healthcare centers easily. In this application I have tested the web application using skills like Automation Testing, Selenium, Python, Pycharm, Unit Testing, Unit Integration Testing, System Testing, Black Box testing and STLC. I have utilized these skills to determine the quality level of the web application and to find bugs. Here I have attached my test scripts. Kindly go through it. 
