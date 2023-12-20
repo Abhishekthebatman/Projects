@@ -1,0 +1,74 @@
+import time
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.select import Select
+
+driver = webdriver.Chrome()
+driver.get("https://katalon-demo-cura.herokuapp.com/")
+driver.maximize_window()
+
+driver.implicitly_wait(8)
+class curaHealthCare:
+    globals()
+    def loginByProvidingValidCredentials():
+
+        driver.find_element(By.XPATH,"//i[@class='fa fa-bars']").click()
+        driver.find_element(By.XPATH,"//a[normalize-space()='Login']").click()
+        driver.find_element(By.NAME,"username").send_keys("John Doe")
+        driver.find_element(By.XPATH,"//input[@id='txt-password']").send_keys("ThisIsNotAPassword")
+        driver.find_element(By.XPATH,"//button[@id='btn-login']").click()
+
+
+    def createAppointment():
+        selectOption=Select(driver.find_element(By.XPATH,"//select[@id='combo_facility']"))
+        selectOption.select_by_visible_text("Tokyo CURA Healthcare Center")
+        driver.find_element(By.XPATH,"//input[@id='chk_hospotal_readmission']").click()
+        driver.find_element(By.XPATH,"//input[@id='radio_program_medicare']").click()
+        driver.find_element(By.XPATH,"//input[@id='txt_visit_date']").send_keys("01/03/2024")
+        driver.find_element(By.XPATH,"//textarea[@id='txt_comment']").send_keys("Have been suffering from back pain. need treatment to cure my issue.")
+        driver.find_element(By.XPATH,"//button[@id='btn-book-appointment']").click()
+
+    def checkingAppointmentConfirmation():
+        facility2=driver.find_element(By.XPATH,"//*[@id='facility']").text
+        readmission2=driver.find_element(By.XPATH,"//p[@id='hospital_readmission']").text
+        visitDate=driver.find_element(By.XPATH,"//p[@id='visit_date']").text
+        comment=driver.find_element(By.XPATH,"//p[@id='comment']").text
+        if (facility2 == "Tokyo CURA Healthcare Center" and readmission2 == "Yes" and visitDate == "01/03/2023" and comment == "Have been suffering from back pain. need treatment to cure my issue."):
+            print("Appointment Confirmed and information is valid")
+        else:
+            print("Invalid information")
+        driver.find_element(By.XPATH,"//i[@class='fa fa-bars']").click()
+        driver.find_element(By.XPATH,"//a[normalize-space()='Logout']").click()
+    def loginByInvalidCredentials():
+            try:
+                driver.find_element(By.XPATH, "//i[@class='fa fa-bars']").click()
+                driver.find_element(By.XPATH, "//a[normalize-space()='Login']").click()
+                driver.find_element(By.NAME, "username").send_keys("Abc")
+                driver.find_element(By.XPATH, "//input[@id='txt-password']").send_keys("123")
+                driver.find_element(By.XPATH, "//button[@id='btn-login']").click()
+                selectOption=Select(driver.find_element(By.XPATH,"//select[@id='combo_facility']"))
+            except:
+                print("loginByInvalidCredentials-> Provide valid credentials")
+    def tryToGetAppointmentOnPastDate():
+
+                Login.loginByProvidingValidCredentials()
+                selectOption = Select(driver.find_element(By.XPATH, "//select[@id='combo_facility']"))
+                selectOption.select_by_visible_text("Tokyo CURA Healthcare Center")
+                driver.find_element(By.XPATH, "//input[@id='chk_hospotal_readmission']").click()
+                driver.find_element(By.XPATH, "//input[@id='radio_program_medicare']").click()
+                msg = driver.find_element(By.XPATH, "//input[@id='txt_visit_date']").send_keys("01/09/2020")
+                driver.find_element(By.XPATH, "//textarea[@id='txt_comment']").send_keys(
+                    "Have been suffering from back pain. need treatment to cure my issue.")
+                driver.find_element(By.XPATH, "//button[@id='btn-book-appointment']").click()
+                print("tryToGetAppointmentOnPastDate->Past dates are being accepted for appointments")
+
+Login=curaHealthCare
+Login.loginByProvidingValidCredentials()
+Login.createAppointment()
+Login.checkingAppointmentConfirmation()
+invalidLogin=curaHealthCare
+invalidLogin.loginByInvalidCredentials()
+invalidDate=curaHealthCare
+invalidDate.tryToGetAppointmentOnPastDate()
